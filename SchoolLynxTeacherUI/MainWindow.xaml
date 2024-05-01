@@ -1,0 +1,72 @@
+﻿<Window x:Class="SchoolLynxUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SchoolLynxUI"
+        mc:Ignorable="d"
+        Title="School Lynx - Teacher UI" Height="450" Width="800" FontSize="14" Background="#08ABC4" Loaded="Window_Loaded">
+    <DockPanel Margin="10">
+        <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+            <Image Source="images/logo.png" DockPanel.Dock="Right" MaxHeight="50"/>
+            <TextBlock Text="School Lynx - Teacher UI" DockPanel.Dock="Left" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Foreground="White" Margin="10,0,0,0"/>
+            <ComboBox x:Name="cbTeachers" DockPanel.Dock="Left" VerticalAlignment="Center" MinWidth="150" Margin="20,0,0,0"
+                      ItemsSource="{Binding Teachers}" DisplayMemberPath="Lastname" SelectedItem="{Binding SelectedTeacher, Mode=TwoWay}"/>
+        </DockPanel>
+        <Grid Grid.Row="1" Margin="0,10">
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="MinHeight" Value="25" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Margin" Value="10,0,0,5" />
+                    <Setter Property="Padding" Value="5,2" />
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <DataGrid x:Name="dgMessages" Grid.Row="0" Grid.Column="0" Margin="5" AutoGenerateColumns="False"
+                 ItemsSource="{Binding Messages}" DisplayMemberPath="Title"
+                 SelectedItem="{Binding SelectedMessage, Mode=TwoWay}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Titel" Binding="{Binding Title}" />
+                    <DataGridTextColumn Header="Sent on" Binding="{Binding SentOn, StringFormat={}{0:dd. MM. yyyy}}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <DockPanel Grid.Row="0" Grid.Column="1" Margin="5">
+                <TextBox Text="{Binding SelectedMessage.Title, Mode=TwoWay}" DockPanel.Dock="Top" Margin="0,0,0,5" Padding="5,2" />
+                <TextBox Text="{Binding SelectedMessage.Text, Mode=TwoWay}" Margin="0,0,0,0" Padding="5,2" TextWrapping="Wrap" AcceptsReturn="True"/>
+            </DockPanel>
+
+            <ListBox x:Name="lbConfirmations" Grid.Row="1" Grid.Column="0" Margin="5" IsEnabled="False"
+                 ItemsSource="{Binding SelectedMessage.Confirmations}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel LastChildFill="False">
+                            <TextBlock Text="{Binding Person.Lastname}" DockPanel.Dock="Left" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding ConfirmedOn, StringFormat= ({0:dd. MM. yyyy  hh:mm})}" DockPanel.Dock="Left" />
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <DockPanel Grid.Row="1" Grid.Column="1" LastChildFill="False" Margin="5">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Right">
+                    <Button Content="Add Message" Click="AddMessageButton_Click" />
+                    <Button Content="Update Message" Click="UpdateMessageButton_Click" IsEnabled="{Binding HasSelectedMessage}"/>
+                    <Button Content="Delete Message" Click="DeleteMessageButton_Click" IsEnabled="{Binding HasSelectedMessage}" />
+                </StackPanel>
+                <Image Source="images/logo.png" DockPanel.Dock="Right" Margin="20,20,0,0"/>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Left">
+                    <Button Content="Refresh Confirmations" Margin="0" Click="RefreshConfirmationsButton_Click" IsEnabled="{Binding HasSelectedMessage}"/>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Window>
