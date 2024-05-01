@@ -52,8 +52,8 @@ namespace SchoolLynxUI
 
         internal async Task UpdateMessageAsync(Message selectedMessage)
         {
-            string content = JsonSerializer.Serialize(new PatchMessage(selectedMessage.Title, selectedMessage.Text));
-            await _client.PatchAsync($"messages/{selectedMessage.Id}", new StringContent(content));
+            var content = JsonContent.Create(new PatchMessage(selectedMessage.Title, selectedMessage.Text));
+            await _client.PatchAsync($"messages/{selectedMessage.Id}", content);
         }
 
         internal async Task DeleteMessageAsync(int messageId)
